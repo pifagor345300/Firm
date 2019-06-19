@@ -1,5 +1,10 @@
 package ru.pifagors.doctor.firm.objects;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonCreator;
+
+import static com.fasterxml.jackson.annotation.JsonCreator.Mode.DEFAULT;
+@JsonAutoDetect
 public class Person {
 
     private String department;
@@ -7,6 +12,9 @@ public class Person {
     private String fio;
     private String phone;
     private String email;
+
+    public Person() {
+    }
 
     public Person(String department, String address, String fio, String phone, String email) {
         this.department = department;

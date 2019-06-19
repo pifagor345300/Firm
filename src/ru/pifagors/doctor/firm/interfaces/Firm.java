@@ -4,10 +4,10 @@ import ru.pifagors.doctor.firm.objects.Person;
 
 public interface Firm {
 
-    //Добавить запись
+    //Add record
     void add(Person person);
-    //Внести изменения
+    //Make changes
     void update(Person person);
-    //Удалить запись
+    //Delete Record
     void delete(Person person);
 }

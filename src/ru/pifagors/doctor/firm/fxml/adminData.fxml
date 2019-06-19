@@ -12,7 +12,7 @@
    <children>
       <HBox prefHeight="55.0" prefWidth="700.0">
          <children>
-            <Label prefHeight="25.0" prefWidth="180.0" text="Аптека/Отдел">
+            <Label prefHeight="25.0" prefWidth="180.0" text="Pharmacy/Department">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -29,7 +29,7 @@
       </HBox>
       <HBox prefHeight="45.0" prefWidth="700.0">
          <children>
-            <Label prefHeight="25.0" prefWidth="180.0" text="Адрес/Должность">
+            <Label prefHeight="25.0" prefWidth="180.0" text="Address/Position">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -46,7 +46,7 @@
       </HBox>
       <HBox prefHeight="45.0" prefWidth="700.0">
          <children>
-            <Label prefHeight="25.0" prefWidth="180.0" text="ФИО Заведующей/ФИО">
+            <Label prefHeight="25.0" prefWidth="180.0" text="NAME of manager/NAME">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -63,7 +63,7 @@
       </HBox>
       <HBox prefHeight="45.0" prefWidth="700.0">
          <children>
-            <Label prefHeight="25.0" prefWidth="180.0" text="Телефон">
+            <Label prefHeight="25.0" prefWidth="180.0" text="Phone">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -105,7 +105,7 @@
                   <Insets left="20.0" top="20.0" />
                </HBox.margin>
             </Button>
-            <Button fx:id="btnEsc" cancelButton="true" mnemonicParsing="false" onAction="#actionClose" prefHeight="30.0" prefWidth="100.0" text="Отмена">
+            <Button fx:id="btnEsc" cancelButton="true" mnemonicParsing="false" onAction="#actionClose" prefHeight="30.0" prefWidth="100.0" text="Cancel">
                <HBox.margin>
                   <Insets left="40.0" top="20.0" />
                </HBox.margin>

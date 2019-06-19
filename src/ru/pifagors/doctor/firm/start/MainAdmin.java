@@ -7,14 +7,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import ru.pifagors.doctor.firm.interfaces.impls.CollectionFirm;
-import ru.pifagors.doctor.firm.objects.Person;
+
+import java.io.IOException;
 
 public class MainAdmin extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("../fxml/adminFirm.fxml"));
-        primaryStage.setTitle("ГУП РК ГАРК");
+        primaryStage.setTitle("State pharmacies of the Republic of Komi");
         primaryStage.setMinHeight(500);
         primaryStage.setMinWidth(900);
         Scene scene = new Scene(root);
@@ -22,12 +23,12 @@ public class MainAdmin extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        testData();
+//        runData();
     }
 
-    private void testData(){
+    private void runData() throws IOException, ClassNotFoundException { //todo Убрать наверное
         CollectionFirm firm = new CollectionFirm();
-        firm.fillTestData();
+        firm.fillData();
 
     }
 

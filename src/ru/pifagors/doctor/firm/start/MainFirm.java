@@ -12,7 +12,7 @@ public class MainFirm extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("../fxml/firm.fxml"));
-        primaryStage.setTitle("ГУП РК ГАРК");
+        primaryStage.setTitle("State pharmacies of the Republic of Komi");
         primaryStage.setMinHeight(500);
         primaryStage.setMinWidth(900);
         Scene scene = new Scene(root);

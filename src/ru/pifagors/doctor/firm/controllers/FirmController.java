@@ -8,6 +8,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import ru.pifagors.doctor.firm.interfaces.impls.CollectionFirm;
 import ru.pifagors.doctor.firm.objects.Person;
 
+import java.io.IOException;
+
 public class FirmController {
 
     private CollectionFirm firmImpl = new CollectionFirm();
@@ -40,7 +42,7 @@ public class FirmController {
     private TableColumn<Person, String> columnEMail;
 
     @FXML
-    private void initialize() {
+    private void initialize() throws IOException, ClassNotFoundException {
         columnAPT.setCellValueFactory(new PropertyValueFactory<Person, String>("department"));
         columnAdres.setCellValueFactory(new PropertyValueFactory<Person, String>("address"));
         columnFIO.setCellValueFactory(new PropertyValueFactory<Person, String>("fio"));
@@ -50,20 +52,26 @@ public class FirmController {
         firmImpl.getPersonList().addListener(new ListChangeListener<Person>() {
             @Override
             public void onChanged(Change<? extends Person> c) {
-                updateCountLabel();
+                try {
+                    updateCountLabel();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
-        firmImpl.fillTestData();
-
+        firmImpl.fillData();
+        updateCountLabel();
         tableFirm.setItems(firmImpl.getPersonList());
 
 
 
     }
 
-    private void updateCountLabel() {
+    private void updateCountLabel() throws IOException, ClassNotFoundException {
 
-        labelCount.setText("Колличество записей: "+ firmImpl.getPersonList().size());
+        labelCount.setText("Number of entries: "+ firmImpl.getPersonList().size());
     }
 }

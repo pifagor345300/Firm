@@ -59,30 +59,37 @@ public class AdminFirmController {
     private TableColumn<Person, String> columnEMail;
 
     @FXML
-    private void initialize() {
+    private void initialize() throws IOException, ClassNotFoundException {
         columnAPT.setCellValueFactory(new PropertyValueFactory<Person, String>("department"));
         columnAdres.setCellValueFactory(new PropertyValueFactory<Person, String>("address"));
         columnFIO.setCellValueFactory(new PropertyValueFactory<Person, String>("fio"));
         columnPhone.setCellValueFactory(new PropertyValueFactory<Person, String>("phone"));
         columnEMail.setCellValueFactory(new PropertyValueFactory<Person, String>("email"));
 
+        firmImpl.fillData();
+        updateCountLabel();
         firmImpl.getPersonList().addListener(new ListChangeListener<Person>() {
+
             @Override
             public void onChanged(Change<? extends Person> c) {
-                updateCountLabel();
+                try {
+                    updateCountLabel();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
-
-        firmImpl.fillTestData();
 
         tableFirm.setItems(firmImpl.getPersonList());
 
 
+
     }
 
-    private void updateCountLabel() {
-
-        labelCount.setText("Количество записей: "+ firmImpl.getPersonList().size());
+    private void updateCountLabel() throws IOException, ClassNotFoundException {
+        labelCount.setText("Number of entries: "+ firmImpl.getPersonList().size());
     }
 
 
@@ -90,7 +97,6 @@ public class AdminFirmController {
 
         Object source = actionEvent.getSource();
 
-        //Если не кнопка - выход
         if (!(source instanceof Button)) { return;}
 
         Button clickedButtun = (Button) source;
@@ -112,7 +118,7 @@ public class AdminFirmController {
         try {
             Stage stage = new Stage();
             Parent root = FXMLLoader.load(getClass().getResource("../fxml/adminData.fxml"));
-            stage.setTitle("Редактирование записи");
+            stage.setTitle("Editing");
             stage.setMinWidth(700);
             stage.setMinHeight(300);
             stage.setResizable(false);
