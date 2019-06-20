@@ -1,21 +1,30 @@
 /*Контроллер формы для клиента*/
 package ru.pifagors.doctor.firm.controllers;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import org.controlsfx.control.textfield.CustomTextField;
+import org.controlsfx.control.textfield.TextFields;
 import ru.pifagors.doctor.firm.interfaces.impls.CollectionFirm;
 import ru.pifagors.doctor.firm.objects.Person;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 public class FirmController {
 
     private CollectionFirm firmImpl = new CollectionFirm();
 
+    private ObservableList<Person> backupList;
+
     @FXML
-    private TextField txtSearch;
+    private CustomTextField txtSearch;
 
     @FXML
     private Button btnSearch;
@@ -48,7 +57,7 @@ public class FirmController {
         columnFIO.setCellValueFactory(new PropertyValueFactory<Person, String>("fio"));
         columnPhone.setCellValueFactory(new PropertyValueFactory<Person, String>("phone"));
         columnEMail.setCellValueFactory(new PropertyValueFactory<Person, String>("email"));
-
+        setupClearButtonField(txtSearch);
         firmImpl.getPersonList().addListener(new ListChangeListener<Person>() {
             @Override
             public void onChanged(Change<? extends Person> c) {
@@ -63,15 +72,43 @@ public class FirmController {
         });
 
         firmImpl.fillData();
+        //backup
+        backupList = FXCollections.observableArrayList();
+        backupList.addAll(firmImpl.getPersonList());
         updateCountLabel();
         tableFirm.setItems(firmImpl.getPersonList());
-
 
 
     }
 
     private void updateCountLabel() throws IOException, ClassNotFoundException {
 
-        labelCount.setText("Number of entries: "+ firmImpl.getPersonList().size());
+        labelCount.setText("Number of entries: " + firmImpl.getPersonList().size());
+    }
+
+    private void setupClearButtonField(CustomTextField customTextField) {
+        try {
+            Method m = TextFields.class.getDeclaredMethod("setupClearButtonField", TextField.class, ObjectProperty.class);
+            m.setAccessible(true);
+            m.invoke(null, customTextField, customTextField.rightProperty());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void actionSearch(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
+        firmImpl.getPersonList().clear();
+
+        for (Person person : backupList) {
+            if (person.getDepartment().toLowerCase().contains(txtSearch.getText().toLowerCase()) ||
+                    person.getAddress().toLowerCase().contains(txtSearch.getText().toLowerCase()) ||
+                    person.getFio().toLowerCase().contains(txtSearch.getText().toLowerCase()) ||
+                    person.getPhone().toLowerCase().contains(txtSearch.getText().toLowerCase()) ||
+                    person.getEmail().toLowerCase().contains(txtSearch.getText().toLowerCase())) {
+                firmImpl.getPersonList().add(person);
+            }
+        }
+        updateCountLabel();
+
     }
 }

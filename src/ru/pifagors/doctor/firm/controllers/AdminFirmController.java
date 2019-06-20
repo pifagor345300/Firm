@@ -2,7 +2,10 @@
 package ru.pifagors.doctor.firm.controllers;
 
 
+import javafx.beans.property.ObjectProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,17 +16,22 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.controlsfx.control.textfield.CustomTextField;
+import org.controlsfx.control.textfield.TextFields;
 import ru.pifagors.doctor.firm.interfaces.impls.CollectionFirm;
 import ru.pifagors.doctor.firm.objects.Person;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 public class AdminFirmController {
 
     private CollectionFirm firmImpl = new CollectionFirm();
 
+    private ObservableList<Person> backupList;
+
     @FXML
-    private TextField txtSearch;
+    private CustomTextField txtSearch;
 
     @FXML
     private Button btnSearch;
@@ -65,8 +73,10 @@ public class AdminFirmController {
         columnFIO.setCellValueFactory(new PropertyValueFactory<Person, String>("fio"));
         columnPhone.setCellValueFactory(new PropertyValueFactory<Person, String>("phone"));
         columnEMail.setCellValueFactory(new PropertyValueFactory<Person, String>("email"));
-
+        setupClearButtonField(txtSearch);
         firmImpl.fillData();
+        backupList = FXCollections.observableArrayList();
+        backupList.addAll(firmImpl.getPersonList());
         updateCountLabel();
         firmImpl.getPersonList().addListener(new ListChangeListener<Person>() {
 
@@ -90,6 +100,16 @@ public class AdminFirmController {
 
     private void updateCountLabel() throws IOException, ClassNotFoundException {
         labelCount.setText("Number of entries: "+ firmImpl.getPersonList().size());
+    }
+
+    private void setupClearButtonField(CustomTextField customTextField) {
+        try {
+            Method m = TextFields.class.getDeclaredMethod("setupClearButtonField", TextField.class, ObjectProperty.class);
+            m.setAccessible(true);
+            m.invoke(null, customTextField, customTextField.rightProperty());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 
@@ -131,6 +151,22 @@ public class AdminFirmController {
         } catch (IOException e) {
             e.printStackTrace();
         };
+
+    }
+
+    public void actionSearch(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
+        firmImpl.getPersonList().clear();
+
+        for (Person person : backupList) {
+            if (person.getDepartment().toLowerCase().contains(txtSearch.getText().toLowerCase()) ||
+                    person.getAddress().toLowerCase().contains(txtSearch.getText().toLowerCase()) ||
+                    person.getFio().toLowerCase().contains(txtSearch.getText().toLowerCase()) ||
+                    person.getPhone().toLowerCase().contains(txtSearch.getText().toLowerCase()) ||
+                    person.getEmail().toLowerCase().contains(txtSearch.getText().toLowerCase())) {
+                firmImpl.getPersonList().add(person);
+            }
+        }
+        updateCountLabel();
 
     }
 }
