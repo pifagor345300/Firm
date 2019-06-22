@@ -97,7 +97,7 @@
       </HBox>
       <HBox prefHeight="65.0" prefWidth="700.0">
          <children>
-            <Button fx:id="btnOk" defaultButton="true" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Ok">
+            <Button fx:id="btnOk" defaultButton="true" mnemonicParsing="false" onAction="#actionSave" prefHeight="30.0" prefWidth="100.0" text="Ok">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>

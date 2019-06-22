@@ -16,6 +16,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import org.controlsfx.control.textfield.CustomTextField;
 import org.controlsfx.control.textfield.TextFields;
 import ru.pifagors.doctor.firm.interfaces.impls.CollectionFirm;
@@ -23,12 +24,29 @@ import ru.pifagors.doctor.firm.objects.Person;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.ResourceBundle;
 
 public class AdminFirmController {
 
-    private CollectionFirm firmImpl = new CollectionFirm();
+    static CollectionFirm firmImpl = new CollectionFirm();
+
+    static int index;
 
     private ObservableList<Person> backupList;
+
+    private Parent fxmlEdit;
+
+    private FXMLLoader fxmlLoader = new FXMLLoader();
+
+    private AdminDataController editDialogController;
+
+    private Stage editDialogStage;
+
+    private Stage mainStage;
+
+    public void setMainStage(Stage mainStage) {
+        this.mainStage = mainStage;
+    }
 
     @FXML
     private CustomTextField txtSearch;
@@ -73,13 +91,8 @@ public class AdminFirmController {
         columnFIO.setCellValueFactory(new PropertyValueFactory<Person, String>("fio"));
         columnPhone.setCellValueFactory(new PropertyValueFactory<Person, String>("phone"));
         columnEMail.setCellValueFactory(new PropertyValueFactory<Person, String>("email"));
-        setupClearButtonField(txtSearch);
-        firmImpl.fillData();
-        backupList = FXCollections.observableArrayList();
-        backupList.addAll(firmImpl.getPersonList());
-        updateCountLabel();
-        firmImpl.getPersonList().addListener(new ListChangeListener<Person>() {
 
+        firmImpl.getPersonList().addListener(new ListChangeListener<Person>() {
             @Override
             public void onChanged(Change<? extends Person> c) {
                 try {
@@ -92,9 +105,20 @@ public class AdminFirmController {
             }
         });
 
+        setupClearButtonField(txtSearch);
+        firmImpl.fillData();
+        backupList = FXCollections.observableArrayList();
+        backupList.addAll(firmImpl.getPersonList());
+        updateCountLabel();
         tableFirm.setItems(firmImpl.getPersonList());
 
-
+        try {
+            fxmlLoader.setLocation(getClass().getResource("../fxml/adminData.fxml"));
+            fxmlEdit = fxmlLoader.load();
+            editDialogController = fxmlLoader.getController();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -113,48 +137,64 @@ public class AdminFirmController {
     }
 
 
-    public void showDialog(ActionEvent actionEvent) throws IOException {
+    public void actionButtonPressed(ActionEvent actionEvent) throws IOException {
 
         Object source = actionEvent.getSource();
 
-        if (!(source instanceof Button)) { return;}
+        if (!(source instanceof Button)) {
+            return;
+        }
 
         Button clickedButtun = (Button) source;
 
         Person selectedPerson = (Person) tableFirm.getSelectionModel().getSelectedItem();
+        index = tableFirm.getSelectionModel().getFocusedIndex();
 
-        switch (clickedButtun.getId()){
+        Window parentWindow = ((Node) actionEvent.getSource()).getScene().getWindow();
+
+        editDialogController.setPerson(selectedPerson);
+
+        switch (clickedButtun.getId()) {
             case "btnAdd":
                 System.out.println("Add " + selectedPerson);
+                editDialogController.setPerson(new Person());
+                showDialog();
+                firmImpl.add(editDialogController.getPerson());
                 break;
             case "btnEdit":
                 System.out.println("Edit " + selectedPerson);
+                showDialog();
+                firmImpl.update(index, selectedPerson);
                 break;
             case "btnDel":
                 System.out.println("Del " + selectedPerson);
+                firmImpl.delete(selectedPerson);
+
                 break;
         }
 
-        try {
-            Stage stage = new Stage();
-            Parent root = FXMLLoader.load(getClass().getResource("../fxml/adminData.fxml"));
-            stage.setTitle("Editing");
-            stage.setMinWidth(700);
-            stage.setMinHeight(300);
-            stage.setResizable(false);
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(0, "ru/pifagors/doctor/firm/styles/firm.css");
-            stage.setScene(scene);
-            stage.initModality(Modality.WINDOW_MODAL);
-            stage.initOwner(((Node)actionEvent.getSource()).getScene().getWindow());
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        };
 
     }
 
-    public void actionSearch(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
+    private void showDialog() {
+        if (editDialogStage==null) {
+            editDialogStage = new Stage();
+            editDialogStage.setTitle("Editing");
+            editDialogStage.setMinWidth(700);
+            editDialogStage.setMinHeight(300);
+            editDialogStage.setResizable(false);
+            Scene scene = new Scene(fxmlEdit);
+            scene.getStylesheets().add(0, "ru/pifagors/doctor/firm/styles/firm.css");
+            editDialogStage.setScene(scene);
+            editDialogStage.initModality(Modality.WINDOW_MODAL);
+            editDialogStage.initOwner(mainStage);
+        }
+
+        editDialogStage.showAndWait();
+
+    }
+
+    public void actionSearch() throws IOException, ClassNotFoundException {
         firmImpl.getPersonList().clear();
 
         for (Person person : backupList) {
@@ -169,4 +209,6 @@ public class AdminFirmController {
         updateCountLabel();
 
     }
+
+
 }

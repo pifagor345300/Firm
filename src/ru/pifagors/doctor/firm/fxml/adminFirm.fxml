@@ -46,17 +46,17 @@
                   </HBox>
                   <HBox prefHeight="78.0" prefWidth="700.0">
                      <children>
-                        <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#showDialog" prefHeight="30.0" prefWidth="100.0" text="Add">
+                        <Button fx:id="btnAdd" mnemonicParsing="false" onAction="#actionButtonPressed" prefHeight="30.0" prefWidth="100.0" text="Add">
                            <HBox.margin>
                               <Insets left="20.0" top="10.0" />
                            </HBox.margin>
                         </Button>
-                        <Button fx:id="btnEdit" mnemonicParsing="false" onAction="#showDialog" prefHeight="30.0" prefWidth="100.0" text="Change">
+                        <Button fx:id="btnEdit" mnemonicParsing="false" onAction="#actionButtonPressed" prefHeight="30.0" prefWidth="100.0" text="Change">
                            <HBox.margin>
                               <Insets left="40.0" top="10.0" />
                            </HBox.margin>
                         </Button>
-                        <Button fx:id="btnDel" mnemonicParsing="false" onAction="#showDialog" prefHeight="30.0" prefWidth="100.0" text="Remove">
+                        <Button fx:id="btnDel" mnemonicParsing="false" onAction="#actionButtonPressed" prefHeight="30.0" prefWidth="100.0" text="Remove">
                            <HBox.margin>
                               <Insets left="40.0" top="10.0" />
                            </HBox.margin>

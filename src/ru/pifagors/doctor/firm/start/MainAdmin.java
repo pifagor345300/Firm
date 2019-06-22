@@ -23,14 +23,8 @@ public class MainAdmin extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-//        runData();
     }
 
-    private void runData() throws IOException, ClassNotFoundException { //todo Убрать наверное
-        CollectionFirm firm = new CollectionFirm();
-        firm.fillData();
-
-    }
 
     public static void main(String[] args) {
         launch(args);

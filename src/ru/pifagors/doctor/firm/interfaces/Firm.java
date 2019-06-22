@@ -7,7 +7,7 @@ public interface Firm {
     //Add record
     void add(Person person);
     //Make changes
-    void update(Person person);
+    void update(int index, Person person);
     //Delete Record
     void delete(Person person);
 }

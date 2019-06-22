@@ -20,18 +20,22 @@ public class CollectionFirm implements Firm {
 
 
     @Override
-    public void add(Person person) { personList.add(person);
-
+    public void add(Person person) {
+        personList.add(person);
+        SerializeJSON.serWrite(personList);
     }
 
     @Override
-    public void update(Person person) {
-
+    public void update(int index, Person person) {
+        personList.set(index, person);
+//        personList.add(person);
+        SerializeJSON.serWrite(personList);
     }
 
     @Override
-    public void delete(Person person) { personList.remove(person);
-
+    public void delete(Person person) {
+        personList.remove(person);
+        SerializeJSON.serWrite(personList);
     }
 
     public ObservableList<Person> getPersonList() throws IOException, ClassNotFoundException {
@@ -41,8 +45,9 @@ public class CollectionFirm implements Firm {
 
 
 
-    public  void fillData() throws IOException, ClassNotFoundException {
-//        personList.add(new Person("АИТ","Программист","Лашманов","7777777","ait@mail.ru")); //todo del
+    public  void fillData() {
+ // Initial data filling
+//        personList.add(new Person("АИТ","Программист","Лашманов","7777777","ait@mail.ru"));
 //        personList.add(new Person("Аптека 1","Заведующая","Набока","29-39-79","a1@mail.ru"));
 //        personList.add(new Person("Аптека 10","Заведующая","Сенькина","29-39-87","a10@mail.ru"));
 //        personList.add(new Person("ГУП РК ГАРК","Ген. директор","Лейбов","29-39-29","dir@mail.ru"));
